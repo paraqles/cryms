@@ -1,0 +1,90 @@
+Title: Project Idea Documentation and Script
+Author: paraqles
+Date: 2013-04-21
+State: Draft
+
+# CRyMS
+
+### Description of project
+
+The CRyMS stands for Content in Ruby Managed System.
+
+The plan is to build an structured and extensible system with the following
+features:
+
+  10. Git managed content
+  20. Plugin structure
+    10. Extensible content types
+    20. Extensible format for content writing
+  30. Status for content
+    10. Draft
+    20. Published
+    30. Restricted
+    40. Limited
+      10. in time
+      20. to time
+      30. in uses
+
+----
+
+1 Git managed content
+
+  After some thoughts, i think this would be nice to be implemented with an
+  cryms plugin. So therefore it would be best to describe the plugin structure
+  first. Have a look at the [Plugin Structure](#plugin_structure)
+
+----
+
+2 <a id="plugin_structure"></a>Plugin structure
+
+  For plugins we need a base level of access to the CRyMS Application.
+  Access to:
+
+  * [Config](#config)
+  * [Content](#content)
+  * [Hook System](#hook_system)
+
+----
+
+### <a id="hook_system"></a>Hook System
+
+The hook system provides access to various actions performed during processing
+the request.
+
+Following is the list of hooks that should to be register for:
+
+|  Hookname       |  Called when                                                |
+| :------------   | :---------------------------------------------------------- |
+| asset\_type     | checking if the asset exist, to determine which asset types next to check. |
+| content\_type   | checking if the content exist, to determine which content type next to check. |
+| asset\_render   | the asset is found and now it has to be rendered. Should return the rendered content. |
+| content\_render | the content is found and now it has to be rendered. Should return the rendered content. |
+| parse\_metadata | the metadata of a file must be parsed to set options for the asset/content. |
+[Hooknames]
+
+----
+
+### <a id="content"></a>Content
+
+A content has a type that defines its metadata and the needed
+[presentation elements](#presentation)
+
+#### <a id="content_backend"></a>Content Backend
+
+The content backends provide a way to abstract the save and retrieve of content.
+All registered backend provider will queried for the content in the configured
+priority.
+
+A content provider should provide the following methods:
+
+  * has(content\_key)
+  * get(content\_key)
+  * put(content\_key, content\_obj)
+
+----
+
+### Presentation Processing
+
+The presentation processing structure concatenates several
+[presentation elements](#presentation elements).
+What elements are specific to [content types](#content_types)
